@@ -4,6 +4,7 @@ Changelog
 0.9 - unreleased
 ----------------
 
+- Modernized `ztk_kgs` code and skip the `zopeapp-versions` file for ZTK 2+.
 
 0.8 - 2010-09-09
 ----------------

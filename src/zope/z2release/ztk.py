@@ -2,6 +2,8 @@ import os
 import sys
 import urllib
 
+BASE_URL = 'http://svn.zope.org/*checkout*/zopetoolkit/'
+
 
 def main():
     if len(sys.argv) != 3:
@@ -16,8 +18,7 @@ def main():
         print('Creating index directory: %s' % dirname)
         os.makedirs(dirname)
 
-    versions_url = 'http://svn.zope.org/*checkout*/zopetoolkit/' + \
-                   '%s/ztk-versions.cfg' % tag
+    versions_url = BASE_URL + '%s/ztk-versions.cfg' % tag
     print('Fetching %s' % versions_url)
     response = urllib.urlopen(versions_url)
     if response.code == 200:
@@ -28,8 +29,11 @@ def main():
     else:
         print('Failed to fetch %s' % versions_url)
 
-    app_versions_url = 'http://svn.zope.org/*checkout*/zopetoolkit/' + \
-                       '%s/zopeapp-versions.cfg' % tag
+    if tag.split('/')[-1].startswith('2'):
+        # ZTK 2.0+ no longer have a zopeapp-versions file
+        return
+
+    app_versions_url = BASE_URL + '%s/zopeapp-versions.cfg' % tag
     print('Fetching %s' % app_versions_url)
     response = urllib.urlopen(app_versions_url)
     if response.code == 200:
