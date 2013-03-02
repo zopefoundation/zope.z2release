@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.9 - unreleased
+0.9 - 2013-03-02
 ----------------
 
 - Modernized `z2_kgs` code and updated it to work with Github.
