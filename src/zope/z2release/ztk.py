@@ -13,24 +13,32 @@ def main():
     tag = sys.argv[1]
     dirname = sys.argv[2]
     if not os.path.exists(dirname):
-        print >>sys.stderr, 'Creating index directory: %s' % dirname
+        print('Creating index directory: %s' % dirname)
         os.makedirs(dirname)
 
     versions_url = 'http://svn.zope.org/*checkout*/zopetoolkit/' + \
                    '%s/ztk-versions.cfg' % tag
-    print >>sys.stderr, 'Fetching %s' % versions_url
-    data = urllib.urlopen(versions_url).read()
-    version_file = os.path.join(dirname, 'ztk-versions.cfg')
-    with open(version_file, 'w') as fd:
-        fd.write(data)
+    print('Fetching %s' % versions_url)
+    response = urllib.urlopen(versions_url)
+    if response.code == 200:
+        data = response.read()
+        version_file = os.path.join(dirname, 'ztk-versions.cfg')
+        with open(version_file, 'w') as fd:
+            fd.write(data)
+    else:
+        print('Failed to fetch %s' % versions_url)
 
     app_versions_url = 'http://svn.zope.org/*checkout*/zopetoolkit/' + \
                        '%s/zopeapp-versions.cfg' % tag
-    print >>sys.stderr, 'Fetching %s' % app_versions_url
-    data = urllib.urlopen(app_versions_url).read()
-    app_version_file = os.path.join(dirname, 'zopeapp-versions.cfg')
-    with open(app_version_file, 'w') as fd:
-        fd.write(data)
+    print('Fetching %s' % app_versions_url)
+    response = urllib.urlopen(app_versions_url)
+    if response.code == 200:
+        data = response.read()
+        app_version_file = os.path.join(dirname, 'zopeapp-versions.cfg')
+        with open(app_version_file, 'w') as fd:
+            fd.write(data)
+    else:
+        print('Failed to fetch %s' % app_versions_url)
 
 
 if __name__ == '__main__':
