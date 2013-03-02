@@ -4,6 +4,8 @@ Changelog
 0.9 - unreleased
 ----------------
 
+- Modernized `z2_kgs` code and updated it to work with Github.
+
 - Modernized `ztk_kgs` code and skip the `zopeapp-versions` file for ZTK 2+.
 
 0.8 - 2010-09-09
