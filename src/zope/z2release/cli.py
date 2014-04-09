@@ -7,7 +7,6 @@ in combination with easy_install -i <some_url>
 import os
 import sys
 import urllib
-from xmlrpclib import Server
 
 from zope.z2release.utils import CasePreservingConfigParser
 from zope.z2release.utils import write_index
@@ -24,22 +23,24 @@ def fetch_cfg(url, version_file):
         raise ValueError('Failed to fetch %s' % url)
 
 
-def write_versions(version_file, server, dirname):
+def write_versions(version_file, dirname):
     CP = CasePreservingConfigParser()
     CP.read(version_file)
     for package in CP.options('versions'):
         version = CP.get('versions', package)
         if '#' in version:
             version = version.split('#')[0].strip()
-        write_index(server, package, version, dirname)
+        write_index(package, version, dirname)
     return CP
 
 
-def build_version_file(name, dirname, url, server):
+def build_version_file(name, dirname, url):
     version_file = os.path.join(dirname, name)
     fetch_cfg(url, version_file)
-    return write_versions(version_file, server, dirname)
+    return write_versions(version_file, dirname)
 
+
+GITHUB_RAW = 'https://raw.github.com/zopefoundation/Zope' 
 
 def main():
     if len(sys.argv) != 3:
@@ -54,17 +55,17 @@ def main():
         print('Creating index directory: %s' % dirname)
         os.makedirs(dirname)
 
-    server = Server('http://pypi.python.org/pypi')
-
-    url = 'https://raw.github.com/zopefoundation/Zope/%s/versions.cfg' % tag
-    CP = build_version_file('versions.cfg', dirname, url, server)
+    url = '%s/%s/versions.cfg' % (GITHUB_RAW, tag)
+    CP = build_version_file('versions.cfg', dirname, url)
 
     buildout = CP.options('buildout')
     if 'extends' in buildout:
-        url = CP.get('buildout', 'extends')
+        extends = CP.get('buildout', 'extends').split('\n')
         name = 'ztk-versions.cfg'
-        if 'http' in url and not '\n' in url and url.endswith(name):
-            build_version_file(name, dirname, url, server)
+        for extend in extends:
+            if name in extend:
+                url = '%s/%s/ztk-versions.cfg' % (GITHUB_RAW, tag)
+                build_version_file(name, dirname, url)
 
 
 if __name__ == '__main__':
