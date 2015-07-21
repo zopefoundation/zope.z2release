@@ -40,7 +40,7 @@ def build_version_file(name, dirname, url):
     return write_versions(version_file, dirname)
 
 
-GITHUB_RAW = 'https://raw.github.com/zopefoundation/Zope' 
+GITHUB_RAW = 'https://raw.githubusercontent.com/zopefoundation/Zope' 
 
 def main():
     if len(sys.argv) != 3:
