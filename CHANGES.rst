@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Access PyPI via the supported JSON API, rather than unsupported / broken
+  XML-RPC API.
+
 0.9 - 2013-03-02
 ----------------
 
