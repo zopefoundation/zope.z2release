@@ -55,7 +55,10 @@ def main():
         print('Creating index directory: %s' % dirname)
         os.makedirs(dirname)
 
-    url = '%s/%s/versions.cfg' % (GITHUB_RAW, tag)
+    if tuple(tag.split('.')) >= (2, 13, 23):
+        url = '%s/%s/buildout.cfg' % (GITHUB_RAW, tag)
+    else:
+        url = '%s/%s/versions.cfg' % (GITHUB_RAW, tag)
     CP = build_version_file('versions.cfg', dirname, url)
 
     buildout = CP.options('buildout')
